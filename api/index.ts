@@ -1,9 +1,8 @@
 const express = require('express');
 const PDFDocument = require('pdfkit');
 const axios = require('axios');
+const svgToImg = require('svg-to-img');
 const nodemailer = require('nodemailer');
-const sharp = require('sharp'); // Import Sharp
-const stream = require('stream');
 
 const app = express();
 
@@ -20,14 +19,14 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req: any, res: { send: (arg0: string) => any; }) => res.send("Express on Vercel"));
 
 // New route handler for PDF generation
-app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any; industry: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; setHeader: (arg0: string, arg1: string) => void; }) => {
+app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any; industry: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
     try {
-        let {   userName, businessName, industry, targetAudience, visualPreference, keyMessage, designElements,
-                firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, 
-                firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB,
-                firstHex, secondHex, thirdHex, fourthHex, fifthHex,
-                firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK,
-                screenshotUrl } = req.query;
+        let { userName, businessName, industry, targetAudience, visualPreference, keyMessage, designElements,
+            firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, 
+            firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB,
+            firstHex, secondHex, thirdHex, fourthHex, fifthHex,
+            firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK,
+            screenshotUrl } = req.query;
         
         userName = decodeURIComponent(userName);
         firstRGB = decodeURIComponent(firstRGB);
@@ -45,7 +44,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any
         const rgbSet = [firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB];
         const hexSet = [firstHex, secondHex, thirdHex, fourthHex, fifthHex];
         const cmykSet = [firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK];
-        
+
         // Create a new PDF document in memory
         const doc = new PDFDocument({ layout: 'landscape' });
         const buffers: any = [];
@@ -76,8 +75,6 @@ app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any
             }
         });
 
-        userName = decodeURIComponent(userName);
-
         // Add User Name
         doc.fontSize(12).text(`User Name: ${userName}`, 50, 50);
 
@@ -105,30 +102,33 @@ app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any
         .text(`Key Message: ${keyMessage}`, 50, 490)
         .text(`Design Elements: ${designElements}`, 50, 505);
 
-        // Pipe the PDF document to the response
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="landscape.pdf"`);
-
         // Add "Color Palette" header
         doc.font('Helvetica-Bold').text('COLOR PALETTE', 350, 90, { continued: true, width: 200, align: 'right' });
-        
+
+        // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
+        const textXCoordinate = 530; // X-coordinate for text
         let index = 0;
         for (const url of urlSet) {
             const response = await axios.get(url, { responseType: 'text' });
             const svgString = response.data;
 
-            // Convert SVG to PNG using Sharp
-            const pngBuffer = await sharp(Buffer.from(svgString)).png().toBuffer();
+            // Convert SVG to PNG
+            const pngBuffer = await svgToImg.from(svgString).toPng();
 
-            // Embed the converted PNG onto the PDF
-            doc
-                .fontSize(10)
-                .text('')
-                .text(`HEX: ${hexSet[index]}`, 530, currentPosition + 7)
-                .text(`RGB: ${rgbSet[index]}`, 530, currentPosition + 17)
-                .text(`CMYK: ${cmykSet[index]}`, 530, currentPosition + 27)
-                .image(pngBuffer, 450, currentPosition, { width: 70, height: 70 });
+            // Draw the image on the right side
+            doc.image(pngBuffer, 450, currentPosition, { width: 70, height: 70 });
+
+            // Add text next to the image
+            const hexValue = hexSet[index];
+            const rgbValue = rgbSet[index];
+            const cmykValue = cmykSet[index];
+
+            doc.fontSize(10)
+            .text('')
+            .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition + 7)
+            .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + 17)
+            .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 27);
 
             currentPosition += 95; // Increment vertical position
             index++;
@@ -142,9 +142,6 @@ app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any
     }
 });
 
-const port = 3800;
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+app.listen(3001, () => console.log("Server ready on port 3001."));
 
 module.exports = app;

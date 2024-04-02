@@ -11,9 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const express = require('express');
 const PDFDocument = require('pdfkit');
 const axios = require('axios');
+const svgToImg = require('svg-to-img');
 const nodemailer = require('nodemailer');
-const sharp = require('sharp'); // Import Sharp
-const stream = require('stream');
 const app = express();
 // Configure Nodemailer
 const transporter = nodemailer.createTransport({
@@ -72,7 +71,6 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                 res.status(500).send('Error sending email');
             }
         }));
-        userName = decodeURIComponent(userName);
         // Add User Name
         doc.fontSize(12).text(`User Name: ${userName}`, 50, 50);
         // Add Date Generated
@@ -94,26 +92,28 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             .text(`Visual Preference: ${visualPreference}`, 50, 475)
             .text(`Key Message: ${keyMessage}`, 50, 490)
             .text(`Design Elements: ${designElements}`, 50, 505);
-        // Pipe the PDF document to the response
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="landscape.pdf"`);
         // Add "Color Palette" header
         doc.font('Helvetica-Bold').text('COLOR PALETTE', 350, 90, { continued: true, width: 200, align: 'right' });
+        // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
+        const textXCoordinate = 530; // X-coordinate for text
         let index = 0;
         for (const url of urlSet) {
             const response = yield axios.get(url, { responseType: 'text' });
             const svgString = response.data;
-            // Convert SVG to PNG using Sharp
-            const pngBuffer = yield sharp(Buffer.from(svgString)).png().toBuffer();
-            // Embed the converted PNG onto the PDF
-            doc
-                .fontSize(10)
+            // Convert SVG to PNG
+            const pngBuffer = yield svgToImg.from(svgString).toPng();
+            // Draw the image on the right side
+            doc.image(pngBuffer, 450, currentPosition, { width: 70, height: 70 });
+            // Add text next to the image
+            const hexValue = hexSet[index];
+            const rgbValue = rgbSet[index];
+            const cmykValue = cmykSet[index];
+            doc.fontSize(10)
                 .text('')
-                .text(`HEX: ${hexSet[index]}`, 530, currentPosition + 7)
-                .text(`RGB: ${rgbSet[index]}`, 530, currentPosition + 17)
-                .text(`CMYK: ${cmykSet[index]}`, 530, currentPosition + 27)
-                .image(pngBuffer, 450, currentPosition, { width: 70, height: 70 });
+                .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition + 7)
+                .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + 17)
+                .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 27);
             currentPosition += 95; // Increment vertical position
             index++;
         }
@@ -125,8 +125,5 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(500).send('Error generating PDF');
     }
 }));
-const port = 3800;
-app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
-});
+app.listen(3001, () => console.log("Server ready on port 3001."));
 module.exports = app;
