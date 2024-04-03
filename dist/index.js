@@ -77,23 +77,27 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         const dateGenerated = new Date().toLocaleDateString();
         doc.text(`Date Generated: ${dateGenerated}`, 550, 50);
         // Add "Typography" header
-        doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 90, { continued: true, width: 200, align: 'left' });
+        doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 90, { continued: true, width: 200, align: 'left' });
+        // Add business details
+        doc.font('Helvetica').fontSize(10)
+            .text('')
+            .text(`Business Name: ${businessName}`, 50, 120)
+            .text(`Industry: ${industry}`, 50, 135)
+            .text(`Target Audience: ${targetAudience}`, 50, 150)
+            .text('')
+            .text(`Visual Preference: ${visualPreference}`, 50, 175)
+            .text('')
+            .text(`Key Message: ${keyMessage}`, 50, 200)
+            .text(`Design Elements: ${designElements}`, 50, 215);
+        // Add "Typography" header
+        doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 255, { continued: true, width: 200, align: 'left' });
         // Add screenshot image from URL
         const screenshotResponse = yield axios.get(screenshotUrl, { responseType: 'arraybuffer' });
         const screenshotImage = screenshotResponse.data;
         // Draw the screenshot image on the page
-        doc.image(screenshotImage, 50, 120, { width: 300 });
-        // Add business details
-        doc.font('Helvetica').fontSize(10)
-            .text('')
-            .text(`Business Name: ${businessName}`, 50, 430)
-            .text(`Industry: ${industry}`, 50, 445)
-            .text(`Target Audience: ${targetAudience}`, 50, 460)
-            .text(`Visual Preference: ${visualPreference}`, 50, 475)
-            .text(`Key Message: ${keyMessage}`, 50, 490)
-            .text(`Design Elements: ${designElements}`, 50, 505);
+        doc.image(screenshotImage, 50, 285, { width: 300 });
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 350, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').text('COLOR PALETTE', 330, 90, { continued: true, width: 200, align: 'right' });
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
         const textXCoordinate = 530; // X-coordinate for text
