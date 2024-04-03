@@ -79,16 +79,17 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         // Add "Typography" header
         doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 90, { continued: true, width: 200, align: 'left' });
         // Add business details
+        const lineHeight = 15; // Adjust this value as needed
+        const startY = 120; // Start Y position
+        const spacing = 5; // Adjust this value to control spacing between lines
         doc.font('Helvetica').fontSize(10)
             .text('')
-            .text(`Business Name: ${businessName}`, 50, 120)
-            .text(`Industry: ${industry}`, 50, 135)
-            .text(`Target Audience: ${targetAudience}`, 50, 150)
-            .text('')
-            .text(`Visual Preference: ${visualPreference}`, 50, 175)
-            .text('')
-            .text(`Key Message: ${keyMessage}`, 50, 200)
-            .text(`Design Elements: ${designElements}`, 50, 215);
+            .text(`Business Name: ${businessName}`, 50, startY)
+            .text(`Industry: ${industry}`, 50, startY + lineHeight + spacing)
+            .text(`Target Audience: ${targetAudience}`, 50, startY + 2 * (lineHeight + spacing))
+            .text(`Visual Preference: ${visualPreference}`, 50, startY + 3 * (lineHeight + spacing))
+            .text(`Key Message: ${keyMessage}`, 50, startY + 4 * (lineHeight + spacing))
+            .text(`Design Elements: ${designElements}`, 50, startY + 5 * (lineHeight + spacing));
         // Add "Typography" header
         doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 255, { continued: true, width: 200, align: 'left' });
         // Add screenshot image from URL
