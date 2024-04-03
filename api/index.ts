@@ -91,13 +91,13 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any, busin
         const spacing = 5; // Adjust this value to control spacing between lines
 
         doc.font('Helvetica').fontSize(10)
-            .text('')
-            .text(`Business Name: ${businessName}`, 50, startY)
-            .text(`Industry: ${industry}`, 50, startY + lineHeight + spacing)
-            .text(`Target Audience: ${targetAudience}`, 50, startY + 2 * (lineHeight + spacing))
-            .text(`Visual Preference: ${visualPreference}`, 50, startY + 3 * (lineHeight + spacing))
-            .text(`Key Message: ${keyMessage}`, 50, startY + 4 * (lineHeight + spacing))
-            .text(`Design Elements: ${designElements}`, 50, startY + 5 * (lineHeight + spacing));
+        .text('')
+        .text(`Business Name: ${businessName}`, 50, startY)
+        .text(`Industry: ${industry}`, 50, startY + lineHeight + spacing)
+        .text(`Target Audience: ${targetAudience}`, 50, startY + 2 * (lineHeight + spacing))
+        .text(`Visual Preference: ${visualPreference}`, 50, startY + 3 * (lineHeight + spacing))
+        .text(`Key Message: ${keyMessage}`, 50, startY + 4 * (lineHeight + spacing))
+        .text(`Design Elements: ${designElements}`, 50, startY + 5 * (lineHeight + spacing));
 
 
         // Add "Typography" header
@@ -111,7 +111,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any, busin
         doc.image(screenshotImage, 50, 285, { width: 300 });
         
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 330, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').text('COLOR PALETTE', 334, 90, { continued: true, width: 200, align: 'right' });
 
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
@@ -134,6 +134,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any, busin
 
             doc.fontSize(10)
             .text('')
+            .font('Helvetica')
             .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition + 7)
             .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + 17)
             .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 27);

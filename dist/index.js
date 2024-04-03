@@ -98,7 +98,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         // Draw the screenshot image on the page
         doc.image(screenshotImage, 50, 285, { width: 300 });
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 330, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').text('COLOR PALETTE', 334, 90, { continued: true, width: 200, align: 'right' });
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
         const textXCoordinate = 530; // X-coordinate for text
@@ -116,6 +116,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             const cmykValue = cmykSet[index];
             doc.fontSize(10)
                 .text('')
+                .font('Helvetica')
                 .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition + 7)
                 .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + 17)
                 .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 27);
