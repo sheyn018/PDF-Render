@@ -19,9 +19,9 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req: any, res: { send: (arg0: string) => any; }) => res.send("Express on Vercel"));
 
 // New route handler for PDF generation
-app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any; industry: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
+app.get("/generate-pdf", async (req: { query: { userName: any; email: any, businessName: any; industry: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
     try {
-        let { userName, businessName, industry, targetAudience, visualPreference, keyMessage, designElements,
+        let { userName, email, businessName, industry, targetAudience, visualPreference, keyMessage, designElements,
             firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, 
             firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB,
             firstHex, secondHex, thirdHex, fourthHex, fifthHex,
@@ -56,7 +56,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; businessName: any
                 // Send the PDF as attachment via email
                 const info = await transporter.sendMail({
                     from: 'sheane39@gmail.com',
-                    to: 'sheanemtolentino@gmail.com',
+                    to: email,
                     subject: 'Your PDF Report',
                     text: 'Please find the PDF attached.',
                     attachments: [

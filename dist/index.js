@@ -27,7 +27,7 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 // New route handler for PDF generation
 app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { userName, businessName, industry, targetAudience, visualPreference, keyMessage, designElements, firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB, firstHex, secondHex, thirdHex, fourthHex, fifthHex, firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK, screenshotUrl } = req.query;
+        let { userName, email, businessName, industry, targetAudience, visualPreference, keyMessage, designElements, firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB, firstHex, secondHex, thirdHex, fourthHex, fifthHex, firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK, screenshotUrl } = req.query;
         userName = decodeURIComponent(userName);
         firstRGB = decodeURIComponent(firstRGB);
         secondRGB = decodeURIComponent(secondRGB);
@@ -53,7 +53,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                 // Send the PDF as attachment via email
                 const info = yield transporter.sendMail({
                     from: 'sheane39@gmail.com',
-                    to: 'sheanemtolentino@gmail.com',
+                    to: email,
                     subject: 'Your PDF Report',
                     text: 'Please find the PDF attached.',
                     attachments: [
