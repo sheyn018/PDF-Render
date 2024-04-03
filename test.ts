@@ -9,6 +9,7 @@ async function testGeneratePDFEndpoint() {
       email: 'sheanemtolentino@gmail.com',
       businessName: encodeURIComponent("Acme Inc."),
       industry: encodeURIComponent("Technology"),
+      description: encodeURIComponent("Acme Inc"),
       targetAudience: encodeURIComponent("Developers"),
       visualPreference: encodeURIComponent("Modern"),
       keyMessage: encodeURIComponent("Innovation"),

@@ -19,15 +19,33 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req: any, res: { send: (arg0: string) => any; }) => res.send("Express on Vercel"));
 
 // New route handler for PDF generation
-app.get("/generate-pdf", async (req: { query: { userName: any; email: any, businessName: any; industry: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
+app.get("/generate-pdf", async (req: { query: { userName: any; email: any; businessName: any; industry: any; description: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
     try {
-        let { userName, email, businessName, industry, targetAudience, visualPreference, keyMessage, designElements,
+        let { userName, email, businessName, industry, description, targetAudience, visualPreference, keyMessage, designElements,
             firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, 
             firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB,
             firstHex, secondHex, thirdHex, fourthHex, fifthHex,
             firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK,
             screenshotUrl } = req.query;
         
+        userName = decodeURIComponent(userName);
+        email = decodeURIComponent(email);
+        businessName = decodeURIComponent(businessName);
+        industry = decodeURIComponent(industry);
+        description = decodeURIComponent(description);
+        targetAudience = decodeURIComponent(targetAudience);
+        visualPreference = decodeURIComponent(visualPreference);
+        keyMessage = decodeURIComponent(keyMessage);
+        designElements = decodeURIComponent(designElements);
+        firstRGB = decodeURIComponent(firstRGB);
+        secondRGB = decodeURIComponent(secondRGB);
+        thirdRGB = decodeURIComponent(thirdRGB);
+        fourthRGB = decodeURIComponent(fourthRGB);
+        fifthRGB = decodeURIComponent(fifthRGB);
+        firstCMYK = decodeURIComponent(firstCMYK);
+        secondCMYK = decodeURIComponent(secondCMYK);
+        thirdCMYK = decodeURIComponent(thirdCMYK);
+        fourthCMYK = decodeURIComponent(fourthCMYK);
         userName = decodeURIComponent(userName);
         firstRGB = decodeURIComponent(firstRGB);
         secondRGB = decodeURIComponent(secondRGB);
@@ -82,40 +100,40 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any, busin
         const dateGenerated = new Date().toLocaleDateString();
         doc.text(`Date Generated: ${dateGenerated}`, 550, 50);
 
-        // Add "Typography" header
+        // Add "Business Information" header
         doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 90, { continued: true, width: 200, align: 'left' });
 
         // Add business details
         const lineHeight = 15; // Adjust this value as needed
         const startY = 120; // Start Y position
-        const spacing = 5; // Adjust this value to control spacing between lines
+        const spacing = lineHeight + 5; // Adjust this value to control spacing between lines
 
         doc.font('Helvetica').fontSize(10)
-        .text('')
-        .text(`Business Name: ${businessName}`, 50, startY)
-        .text(`Industry: ${industry}`, 50, startY + lineHeight + spacing)
-        .text(`Target Audience: ${targetAudience}`, 50, startY + 2 * (lineHeight + spacing))
-        .text(`Visual Preference: ${visualPreference}`, 50, startY + 3 * (lineHeight + spacing))
-        .text(`Key Message: ${keyMessage}`, 50, startY + 4 * (lineHeight + spacing))
-        .text(`Design Elements: ${designElements}`, 50, startY + 5 * (lineHeight + spacing));
-
+            .text('')
+            .text(`Business Name: ${businessName}`, 50, startY)
+            .text(`Industry: ${industry}`, 50, startY + spacing)
+            .text(`Description: ${description}`, 50, startY + 2 * spacing)
+            .text(`Target Audience: ${targetAudience}`, 50, startY + 3 * spacing)
+            .text(`Visual Preference: ${visualPreference}`, 50, startY + 4 * spacing)
+            .text(`Key Message: ${keyMessage}`, 50, startY + 5 * spacing)
+            .text(`Design Elements: ${designElements}`, 50, startY + 6 * spacing);
 
         // Add "Typography" header
-        doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 255, { continued: true, width: 200, align: 'left' });
+        doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 275, { continued: true, width: 200, align: 'left' });
 
         // Add screenshot image from URL
         const screenshotResponse = await axios.get(screenshotUrl, { responseType: 'arraybuffer' });
         const screenshotImage = screenshotResponse.data;
 
         // Draw the screenshot image on the page
-        doc.image(screenshotImage, 50, 285, { width: 300 });
+        doc.image(screenshotImage, 50, 305, { width: 300 });
         
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 334, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').text('COLOR PALETTE', 390, 90, { continued: true, width: 200, align: 'right' });
 
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
-        const textXCoordinate = 530; // X-coordinate for text
+        const textXCoordinate = 590; // X-coordinate for text
         let index = 0;
         for (const url of urlSet) {
             const response = await axios.get(url, { responseType: 'text' });
@@ -125,7 +143,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any, busin
             const pngBuffer = await svgToImg.from(svgString).toPng();
 
             // Draw the image on the right side
-            doc.image(pngBuffer, 450, currentPosition, { width: 70, height: 70 });
+            doc.image(pngBuffer, 510, currentPosition, { width: 70, height: 70 });
 
             // Add text next to the image
             const hexValue = hexSet[index];
