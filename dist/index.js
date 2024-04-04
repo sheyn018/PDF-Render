@@ -67,16 +67,17 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         doc.on('data', buffers.push.bind(buffers));
         doc.on('end', () => __awaiter(void 0, void 0, void 0, function* () {
             const pdfBuffer = Buffer.concat(buffers);
+            const filename = `${userName}.pdf`;
             try {
                 // Send the PDF as attachment via email
                 const info = yield transporter.sendMail({
                     from: 'sheane39@gmail.com',
                     to: email,
-                    subject: 'Your PDF Report',
-                    text: 'Please find the PDF attached.',
+                    subject: 'Chatbot-Generated Starter Moodboard',
+                    text: `Hello ${userName}!\n\nWe're thrilled to present you with your personalized starter mood board, generated through your interaction with our chatbot. This mood board is designed to ignite inspiration for your brand identity.\n\nWe look forward to collaborating with you on building your remarkable brand.`,
                     attachments: [
                         {
-                            filename: 'landscape.pdf',
+                            filename: filename,
                             content: pdfBuffer
                         }
                     ]

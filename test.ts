@@ -5,7 +5,7 @@ const { AggregateError } = require('axios');
 async function testGeneratePDFEndpoint() {
   try {
     const queryParams = {
-      userName: encodeURIComponent("Sheane Tolentino"),
+      userName: encodeURIComponent("Jossel Tolentino"),
       email: 'sheanemtolentino@gmail.com',
       businessName: encodeURIComponent("Acme Inc."),
       industry: encodeURIComponent("Technology"),
