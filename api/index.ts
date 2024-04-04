@@ -144,19 +144,21 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
             const pngBuffer = await svgToImg.from(svgString).toPng();
 
             // Draw the image on the right side
-            doc.image(pngBuffer, 510, currentPosition, { width: 70, height: 70 });
+            doc.image(pngBuffer, 510, currentPosition - 3, { width: 70, height: 70 });
 
             // Add text next to the image
             const hexValue = hexSet[index];
             const rgbValue = rgbSet[index];
             const cmykValue = cmykSet[index];
 
+            const lineHeight = 13; // Adjust this value for desired vertical spacing
+
             doc.fontSize(10)
-            .text('')
-            .font('Helvetica')
-            .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition + 7)
-            .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + 17)
-            .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 27);
+                .text('')
+                .font('Helvetica')
+                .text(`HEX: ${hexValue}`, textXCoordinate, currentPosition)
+                .text(`RGB: ${rgbValue}`, textXCoordinate, currentPosition + lineHeight)
+                .text(`CMYK: ${cmykValue}`, textXCoordinate, currentPosition + 2 * lineHeight);
 
             currentPosition += 95; // Increment vertical position
             index++;
