@@ -129,7 +129,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
         doc.image(screenshotImage, 50, 305, { width: 300 });
         
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 390, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').text('COLOR PALETTE', 395, 90, { continued: true, width: 200, align: 'right' });
 
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
