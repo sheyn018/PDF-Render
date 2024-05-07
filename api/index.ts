@@ -79,10 +79,15 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
             try {
                 // Send the PDF as attachment via email
                 const info = await transporter.sendMail({
-                    from: 'sheane39@gmail.com',
+                    from: 'Whizzle at Creative Shizzle <cs.development.test@gmail.com>',
                     to: email,
-                    subject: 'Chatbot-Generated Starter Moodboard',
-                    text: `Hello ${userName}!\n\nWe're thrilled to present you with your personalized starter mood board, generated through your interaction with our chatbot. This mood board is designed to ignite inspiration for your brand identity.\n\nWe look forward to collaborating with you on building your remarkable brand.`,
+                    subject: '[Save This] Your Brand Mood Board',
+                    html: `
+                        <p>Hello ${userName}!</p>
+                        <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with our chatbot. This mood board is designed to ignite inspiration for your brand identity.</p>
+                        <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help. See our Brand My Bizzle Package priced at just $899 for a full brand kit:</p>
+                        <p><a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px;">Get Started Now</a></p>
+                    `,
                     attachments: [
                         {
                             filename: filename,
