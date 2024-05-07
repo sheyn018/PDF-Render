@@ -8,8 +8,8 @@ async function testGeneratePDFEndpoint() {
       userName: encodeURIComponent("Jossel Tolentino"),
       email: 'sheanemtolentino@gmail.com',
       businessName: encodeURIComponent("Acme Inc."),
-      industry: encodeURIComponent("Technology"),
-      description: encodeURIComponent("Acme Inc"),
+      industry: encodeURIComponent("technology"),
+      description: encodeURIComponent("ajskdjasdkljwir Acme Inc"),
       targetAudience: encodeURIComponent("Developers"),
       visualPreference: encodeURIComponent("Modern"),
       keyMessage: encodeURIComponent("Innovation"),
@@ -34,7 +34,8 @@ async function testGeneratePDFEndpoint() {
       thirdCMYK: encodeURIComponent("0, 11, 16, 24"),
       fourthCMYK: encodeURIComponent("18, 0, 7, 10"),
       fifthCMYK: encodeURIComponent("0, 5, 6, 9"),
-      screenshotUrl: "https://puppeteer-api-iy77.onrender.com/capture-screenshot?font=Merriweather",
+      primaryFontUrl: "https://puppeteer-api-iy77.onrender.com/capture-screenshot?font=Merriweather",
+      secondaryFontUrl: "https://puppeteer-api-iy77.onrender.com/capture-screenshot?font=Open+Sans",
     };
 
     const response = await axios.get('http://localhost:3001/generate-pdf', {

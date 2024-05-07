@@ -19,24 +19,29 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req: any, res: { send: (arg0: string) => any; }) => res.send("Express on Vercel"));
 
 // New route handler for PDF generation
-app.get("/generate-pdf", async (req: { query: { userName: any; email: any; businessName: any; industry: any; description: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; screenshotUrl: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
+app.get("/generate-pdf", async (req: { query: { userName: any; email: any; businessName: any; industry: any; description: any; targetAudience: any; visualPreference: any; keyMessage: any; designElements: any; firstUrl: any; secondUrl: any; thirdUrl: any; fourthUrl: any; fifthUrl: any; firstRGB: any; secondRGB: any; thirdRGB: any; fourthRGB: any; fifthRGB: any; firstHex: any; secondHex: any; thirdHex: any; fourthHex: any; fifthHex: any; firstCMYK: any; secondCMYK: any; thirdCMYK: any; fourthCMYK: any; fifthCMYK: any; primaryFontUrl: any; secondaryFontUrl: any;}; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: string): void; new(): any; }; }; }) => {
     try {
         let { userName, email, businessName, industry, description, targetAudience, visualPreference, keyMessage, designElements,
             firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, 
             firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB,
             firstHex, secondHex, thirdHex, fourthHex, fifthHex,
             firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK,
-            screenshotUrl } = req.query;
+            primaryFontUrl, secondaryFontUrl } = req.query;
         
+        // Function to capitalize the first letter of a string
+        function capitalizeFirstLetter(variable: string) {
+            return variable.charAt(0).toUpperCase() + variable.slice(1);
+        }
+
         userName = decodeURIComponent(userName);
         email = decodeURIComponent(email);
-        businessName = decodeURIComponent(businessName);
-        industry = decodeURIComponent(industry);
-        description = decodeURIComponent(description);
-        targetAudience = decodeURIComponent(targetAudience);
-        visualPreference = decodeURIComponent(visualPreference);
-        keyMessage = decodeURIComponent(keyMessage);
-        designElements = decodeURIComponent(designElements);
+        businessName = capitalizeFirstLetter(decodeURIComponent(businessName));
+        industry = capitalizeFirstLetter(decodeURIComponent(industry));
+        description = capitalizeFirstLetter(decodeURIComponent(description));
+        targetAudience = capitalizeFirstLetter(decodeURIComponent(targetAudience));
+        visualPreference = capitalizeFirstLetter(decodeURIComponent(visualPreference));
+        keyMessage = capitalizeFirstLetter(decodeURIComponent(keyMessage));
+        designElements = capitalizeFirstLetter(decodeURIComponent(designElements));
         firstRGB = decodeURIComponent(firstRGB);
         secondRGB = decodeURIComponent(secondRGB);
         thirdRGB = decodeURIComponent(thirdRGB);
@@ -123,12 +128,28 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
         doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 275, { continued: true, width: 200, align: 'left' });
 
         // Add screenshot image from URL
-        const screenshotResponse = await axios.get(screenshotUrl, { responseType: 'arraybuffer' });
+        const screenshotResponse = await axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
         const screenshotImage = screenshotResponse.data;
 
+        // Primary Font Label
+        doc.fontSize(10)
+            .text('')
+            .font('Helvetica')
+            .text('Primary Font:', 50, 305);
+
         // Draw the screenshot image on the page
-        doc.image(screenshotImage, 50, 305, { width: 300 });
+        doc.image(screenshotImage, 130, 285, { width: 200, height: 150 });
         
+        // Add screenshot image from URL
+        const secondaryScreenshotResponse = await axios.get(secondaryFontUrl, { responseType: 'arraybuffer' });
+        const secondaryScreenshotImage = secondaryScreenshotResponse.data;
+
+        // Secondary Font Label
+        doc.font('Helvetica').fontSize(10).text('Secondary Font:', 50, 455);
+
+        // Draw the screenshot image on the page
+        doc.image(secondaryScreenshotImage, 130, 435, { width: 200, height: 150 });
+
         // Add "Color Palette" header
         doc.font('Helvetica-Bold').text('COLOR PALETTE', 395, 90, { continued: true, width: 200, align: 'right' });
 
@@ -136,6 +157,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
         let currentPosition = 120; // Start position vertically
         const textXCoordinate = 590; // X-coordinate for text
         let index = 0;
+
         for (const url of urlSet) {
             const response = await axios.get(url, { responseType: 'text' });
             const svgString = response.data;

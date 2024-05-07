@@ -27,16 +27,20 @@ app.get("/", (req, res) => res.send("Express on Vercel"));
 // New route handler for PDF generation
 app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let { userName, email, businessName, industry, description, targetAudience, visualPreference, keyMessage, designElements, firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB, firstHex, secondHex, thirdHex, fourthHex, fifthHex, firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK, screenshotUrl } = req.query;
+        let { userName, email, businessName, industry, description, targetAudience, visualPreference, keyMessage, designElements, firstUrl, secondUrl, thirdUrl, fourthUrl, fifthUrl, firstRGB, secondRGB, thirdRGB, fourthRGB, fifthRGB, firstHex, secondHex, thirdHex, fourthHex, fifthHex, firstCMYK, secondCMYK, thirdCMYK, fourthCMYK, fifthCMYK, primaryFontUrl, secondaryFontUrl } = req.query;
+        // Function to capitalize the first letter of a string
+        function capitalizeFirstLetter(variable) {
+            return variable.charAt(0).toUpperCase() + variable.slice(1);
+        }
         userName = decodeURIComponent(userName);
         email = decodeURIComponent(email);
-        businessName = decodeURIComponent(businessName);
-        industry = decodeURIComponent(industry);
-        description = decodeURIComponent(description);
-        targetAudience = decodeURIComponent(targetAudience);
-        visualPreference = decodeURIComponent(visualPreference);
-        keyMessage = decodeURIComponent(keyMessage);
-        designElements = decodeURIComponent(designElements);
+        businessName = capitalizeFirstLetter(decodeURIComponent(businessName));
+        industry = capitalizeFirstLetter(decodeURIComponent(industry));
+        description = capitalizeFirstLetter(decodeURIComponent(description));
+        targetAudience = capitalizeFirstLetter(decodeURIComponent(targetAudience));
+        visualPreference = capitalizeFirstLetter(decodeURIComponent(visualPreference));
+        keyMessage = capitalizeFirstLetter(decodeURIComponent(keyMessage));
+        designElements = capitalizeFirstLetter(decodeURIComponent(designElements));
         firstRGB = decodeURIComponent(firstRGB);
         secondRGB = decodeURIComponent(secondRGB);
         thirdRGB = decodeURIComponent(thirdRGB);
@@ -113,10 +117,22 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         // Add "Typography" header
         doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 275, { continued: true, width: 200, align: 'left' });
         // Add screenshot image from URL
-        const screenshotResponse = yield axios.get(screenshotUrl, { responseType: 'arraybuffer' });
+        const screenshotResponse = yield axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
         const screenshotImage = screenshotResponse.data;
+        // Primary Font Label
+        doc.fontSize(10)
+            .text('')
+            .font('Helvetica')
+            .text('Primary Font:', 50, 305);
         // Draw the screenshot image on the page
-        doc.image(screenshotImage, 50, 305, { width: 300 });
+        doc.image(screenshotImage, 130, 285, { width: 200, height: 150 });
+        // Add screenshot image from URL
+        const secondaryScreenshotResponse = yield axios.get(secondaryFontUrl, { responseType: 'arraybuffer' });
+        const secondaryScreenshotImage = secondaryScreenshotResponse.data;
+        // Secondary Font Label
+        doc.font('Helvetica').fontSize(10).text('Secondary Font:', 50, 455);
+        // Draw the screenshot image on the page
+        doc.image(secondaryScreenshotImage, 130, 435, { width: 200, height: 150 });
         // Add "Color Palette" header
         doc.font('Helvetica-Bold').text('COLOR PALETTE', 395, 90, { continued: true, width: 200, align: 'right' });
         // Add images from URLs on the right side
