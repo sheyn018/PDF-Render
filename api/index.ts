@@ -84,10 +84,12 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
                     subject: '[Save This] Your Brand Mood Board',
                     html: `
                         <p>Hello ${userName}!</p>
-                        <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with our chatbot. This mood board is designed to ignite inspiration for your brand identity.</p>
+                        <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with Whizzle! This mood board is designed to ignite inspiration for your brand identity.</p>
                         <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help. See our Brand My Bizzle Package priced at just $899 for a full brand kit:</p>
-                        <p><a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #4CAF50; border: none; color: white; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px;">Get Started Now</a></p>
-                    `,
+                        <div style="text-align: center;">
+                            <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #21A901; border: none; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 13px; border-radius: 20px;">Explore Our Services</a>
+                        </div>
+                        `,
                     attachments: [
                         {
                             filename: filename,
