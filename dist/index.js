@@ -78,14 +78,68 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                     from: 'Whizzle at Creative Shizzle <cs.development.test@gmail.com>',
                     to: email,
                     subject: '[Save This] Your Brand Mood Board',
-                    html: `
-                        <p>Hello ${userName}!</p>
-                        <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with Whizzle! This mood board is designed to ignite inspiration for your brand identity.</p>
-                        <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help. See our Brand My Bizzle Package priced at just $899 for a full brand kit:</p>
-                        <div style="text-align: center;">
-                            <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #21A901; border: none; color: white; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 13px; border-radius: 20px;">Explore Our Services</a>
+                    html: `<!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Your Brand Mood Board</title>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                background-color: #f9f9f9;
+                            }
+                            .container {
+                                max-width: 600px;
+                                margin: 0 auto;
+                                padding: 20px;
+                                background-color: #ffffff;
+                                border-radius: 10px;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                            }
+                            .header {
+                                text-align: center;
+                                margin-bottom: 20px;
+                            }
+                            .header h1 {
+                                color: #333333;
+                            }
+                            .content {
+                                color: #555555;
+                                line-height: 1.6;
+                            }
+                            .cta-button {
+                                display: inline-block;
+                                background-color: #21A901;
+                                color: #ffffff;
+                                padding: 12px 24px;
+                                text-decoration: none;
+                                border-radius: 25px;
+                                transition: background-color 0.3s;
+                            }
+                            .cta-button:hover {
+                                background-color: #1a7e01;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h1>Your Brand Mood Board</h1>
+                            </div>
+                            <div class="content">
+                                <p>Hello <strong>${userName}</strong>!</p>
+                                <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with Whizzle! This mood board is designed to ignite inspiration for your brand identity.</p>
+                                <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help.</p>
+                                <div style="text-align: center;">
+                                    <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #6e36e9; border: none; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; border-radius: 25px;">See our Brand My Bizzle Package</a>
+                                </div>
+                            </div>
                         </div>
-                        `,
+                    </body>
+                    </html>`,
                     attachments: [
                         {
                             filename: filename,
