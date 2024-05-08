@@ -35,7 +35,7 @@ async function testGeneratePDFEndpoint() {
       fourthCMYK: encodeURIComponent("18, 0, 7, 10"),
       fifthCMYK: encodeURIComponent("0, 5, 6, 9"),
       primaryFontUrl: "https://puppeteer-api-iy77.onrender.com/capture-screenshot?font=Merriweather",
-      secondaryFontUrl: "https://puppeteer-api-iy77.onrender.com/capture-screenshot?font=Open+Sans",
+      secondaryFontUrl: "",
     };
 
     const response = await axios.get('http://localhost:3001/generate-pdf', {

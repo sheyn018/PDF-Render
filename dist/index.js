@@ -123,23 +123,32 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             .text(`Design Elements: ${designElements}`, 50, startY + 6 * spacing);
         // Add "Typography" header
         doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 275, { continued: true, width: 200, align: 'left' });
-        // Add screenshot image from URL
-        const screenshotResponse = yield axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
-        const screenshotImage = screenshotResponse.data;
-        // Primary Font Label
-        doc.fontSize(10)
-            .text('')
-            .font('Helvetica')
-            .text('Primary Font:', 50, 305);
-        // Draw the screenshot image on the page
-        doc.image(screenshotImage, 130, 285, { width: 200, height: 150 });
-        // Add screenshot image from URL
-        const secondaryScreenshotResponse = yield axios.get(secondaryFontUrl, { responseType: 'arraybuffer' });
-        const secondaryScreenshotImage = secondaryScreenshotResponse.data;
-        // Secondary Font Label
-        doc.font('Helvetica').fontSize(10).text('Secondary Font:', 50, 455);
-        // Draw the screenshot image on the page
-        doc.image(secondaryScreenshotImage, 130, 435, { width: 200, height: 150 });
+        if (secondaryFontUrl === "") {
+            // Add screenshot image from URL
+            const screenshotResponse = yield axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
+            const screenshotImage = screenshotResponse.data;
+            // Draw the screenshot image on the page
+            doc.image(screenshotImage, 50, 305, { width: 300 });
+        }
+        else {
+            // Add screenshot image from URL
+            const screenshotResponse = yield axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
+            const screenshotImage = screenshotResponse.data;
+            // Primary Font Label
+            doc.fontSize(10)
+                .text('')
+                .font('Helvetica')
+                .text('Primary Font:', 50, 305);
+            // Draw the screenshot image on the page
+            doc.image(screenshotImage, 130, 285, { width: 200, height: 150 });
+            // Add screenshot image from URL
+            const secondaryScreenshotResponse = yield axios.get(secondaryFontUrl, { responseType: 'arraybuffer' });
+            const secondaryScreenshotImage = secondaryScreenshotResponse.data;
+            // Secondary Font Label
+            doc.font('Helvetica').fontSize(10).text('Secondary Font:', 50, 455);
+            // Draw the screenshot image on the page
+            doc.image(secondaryScreenshotImage, 130, 435, { width: 200, height: 150 });
+        }
         // Add "Color Palette" header
         doc.font('Helvetica-Bold').text('COLOR PALETTE', 395, 90, { continued: true, width: 200, align: 'right' });
         // Add images from URLs on the right side
