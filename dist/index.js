@@ -127,6 +127,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                     <body>
                         <div class="container">
                             <div class="header">
+                                <img src="https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/logo.png?t=2024-05-09T07%3A57%3A05.662Z" alt="Creative Shizzle Logo" width="30%" height="30%" >
                                 <h1>Your Brand Mood Board</h1>
                             </div>
                             <div class="content">
@@ -139,7 +140,6 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                             </div>
                             <div class="social-section" style="margin-top: 40px; text-align: center;">
                                 <hr style="border: 0; height: 1px; background-color: #dddddd; margin-bottom: 20px;">
-                                <img src="https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/logo.png?t=2024-05-09T07%3A57%3A05.662Z" alt="Creative Shizzle Logo" width="30%" height="30%" >
                                 <p style="font-size: 16px; margin-bottom: 10px;">Let's get social</p>
                                 <a href="https://www.facebook.com/creativeshizzle">
                                     <img src="https://cdn.jsdelivr.net/gh/dmhendricks/signature-social-icons/icons/round-flat-filled/50px/facebook.png" alt="Facebook" title="Facebook" width="25" height="25" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(263deg) brightness(111%) contrast(107%);" />
@@ -170,12 +170,44 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             }
         }));
         // Add User Name
-        doc.fontSize(12).text(`User Name: ${userName}`, 50, 50);
+        doc.fontSize(12).text(`Name: ${userName}`, 50, 50);
+        // Function to fetch image and embed it into PDF
+        function embedImageFromURL(doc, url, x, y, width) {
+            return __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const response = yield axios.get(url, { responseType: 'arraybuffer' });
+                    const imageData = Buffer.from(response.data, 'binary');
+                    doc.image(imageData, x, y, { width: width });
+                }
+                catch (error) {
+                    console.error("Error fetching or embedding image:", error);
+                }
+            });
+        }
+        // Insert Image
+        const imageURL = 'https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/small-logo.png?t=2024-05-09T09%3A30%3A37.107Z';
+        yield embedImageFromURL(doc, imageURL, 350, 15, 100);
         // Add Date Generated
         const dateGenerated = new Date().toLocaleDateString();
-        doc.text(`Date Generated: ${dateGenerated}`, 550, 50);
-        // Add "Business Information" header
-        doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 90, { continued: true, width: 200, align: 'left' });
+        doc.text(`Date Generated: ${dateGenerated}`, 539, 50);
+        // Define the y-coordinate for the line
+        const lineYCoordinate = 75; // Adjust this value as needed
+        // Add a horizontal thin line below the text and image
+        doc.moveTo(50, lineYCoordinate) // Move to the starting point
+            .lineTo(700, lineYCoordinate) // Draw a line to the end point
+            .lineWidth(1) // Set line width to 1
+            .strokeColor('#E5CE22') // Set line color to #E5CE22
+            .stroke(); // Draw the line
+        // Add the "Business Information" header
+        doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 90, { align: 'left' });
+        // Calculate the height of the text to position the line correctly
+        let textHeight = doc.currentLineHeight() + 10; // Adjusted for padding
+        // Add the line on the left side of the text
+        doc.moveTo(45, 90) // Starting point on the left side of the text
+            .lineTo(45, 80 + textHeight) // Draw a line to the bottom of the text
+            .lineWidth(3) // Set line width to 5
+            .strokeColor('#6e36e9') // Set line color to #6e36e9
+            .stroke(); // Draw the line
         // Add business details
         const lineHeight = 15; // Adjust this value as needed
         const startY = 120; // Start Y position
@@ -190,7 +222,15 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             .text(`Key Message: ${keyMessage}`, 50, startY + 5 * spacing)
             .text(`Design Elements: ${designElements}`, 50, startY + 6 * spacing);
         // Add "Typography" header
-        doc.font('Helvetica-Bold').text('TYPOGRAPHY', 50, 275, { continued: true, width: 200, align: 'left' });
+        doc.font('Helvetica-Bold').fontSize(12).text('TYPOGRAPHY', 50, 276, { continued: true, width: 200, align: 'left' });
+        // Calculate the height of the text to position the line correctly
+        let typographyTextHeight = doc.currentLineHeight() + 10; // Adjusted for padding
+        // Add the line on the left side of the text
+        doc.moveTo(45, 275) // Starting point on the left side of the text
+            .lineTo(45, 265 + typographyTextHeight) // Draw a line to the bottom of the text
+            .lineWidth(3) // Set line width to 3
+            .strokeColor('#6e36e9') // Set line color to #6e36e9
+            .stroke(); // Draw the line
         if (secondaryFontUrl === "") {
             // Add screenshot image from URL
             const screenshotResponse = yield axios.get(primaryFontUrl, { responseType: 'arraybuffer' });
@@ -218,10 +258,22 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             doc.image(secondaryScreenshotImage, 130, 435, { width: 200, height: 150 });
         }
         // Add "Color Palette" header
-        doc.font('Helvetica-Bold').text('COLOR PALETTE', 395, 90, { continued: true, width: 200, align: 'right' });
+        doc.font('Helvetica-Bold').fontSize(12).text('COLOR PALETTE', 438, 90, { continued: true, width: 200, align: 'right' });
+        // Calculate the height of the text to position the line correctly
+        let colorPaletteTextHeight = doc.currentLineHeight() + 10; // Adjusted for padding
+        // Adjust the position of the line
+        let lineXPosition = 530; // X coordinate for the line
+        let lineYStart = 90; // Y coordinate to start the line
+        let lineYEnd = 80 + colorPaletteTextHeight; // Y coordinate to end the line
+        // Add the line on the left side of the text
+        doc.moveTo(lineXPosition, lineYStart) // Starting point on the left side of the text
+            .lineTo(lineXPosition, lineYEnd) // Draw a line to the bottom of the text
+            .lineWidth(3) // Set line width to 3
+            .strokeColor('#6e36e9') // Set line color to #6e36e9
+            .stroke(); // Draw the line
         // Add images from URLs on the right side
         let currentPosition = 120; // Start position vertically
-        const textXCoordinate = 590; // X-coordinate for text
+        const textXCoordinate = 590 + 28; // X-coordinate for text
         let index = 0;
         for (const url of urlSet) {
             const response = yield axios.get(url, { responseType: 'text' });
@@ -229,7 +281,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
             // Convert SVG to PNG
             const pngBuffer = yield svgToImg.from(svgString).toPng();
             // Draw the image on the right side
-            doc.image(pngBuffer, 510, currentPosition - 3, { width: 70, height: 70 });
+            doc.image(pngBuffer, 510 + 28, currentPosition - 3, { width: 70, height: 70 });
             // Add text next to the image
             const hexValue = hexSet[index];
             const rgbValue = rgbSet[index];
