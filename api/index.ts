@@ -136,10 +136,24 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
                             <div class="content">
                                 <p>Hello <strong>${userName}</strong>!</p>
                                 <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with Whizzle! This mood board is designed to ignite inspiration for your brand identity.</p>
-                                <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help.</p>
-                                <div style="text-align: center;">
-                                    <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #6e36e9; border: none; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; border-radius: 25px;">See our Brand My Bizzle Package</a>
+                                <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help. See our <strong>Brand My Bizzle Package</strong> priced at just $899 for a full brand kit.</p>
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #6e36e9; border: none; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; border-radius: 25px;">Explore Our Services</a>
                                 </div>
+                            </div>
+                            <div class="social-section" style="margin-top: 40px; text-align: center;">
+                                <hr style="border: 0; height: 1px; background-color: #dddddd; margin-bottom: 20px;">
+                                <img src="https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/logo.png?t=2024-05-09T07%3A57%3A05.662Z" alt="Creative Shizzle Logo" width="30%" height="30%" >
+                                <p style="font-size: 16px; margin-bottom: 10px;">Let's get social</p>
+                                <a href="https://www.facebook.com/creativeshizzle">
+                                    <img src="https://cdn.jsdelivr.net/gh/dmhendricks/signature-social-icons/icons/round-flat-filled/50px/facebook.png" alt="Facebook" title="Facebook" width="25" height="25" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(263deg) brightness(111%) contrast(107%);" />
+                                </a>
+                                <a href="https://www.instagram.com/creativeshizzle/">
+                                    <img src="https://cdn.jsdelivr.net/gh/dmhendricks/signature-social-icons/icons/round-flat-filled/50px/instagram.png" alt="Instagram" title="Instagram" width="25" height="25" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(259deg) brightness(107%) contrast(101%);" />
+                                </a>
+                                <a href="https://www.linkedin.com/company/creativeshizzle/">
+                                    <img src="https://cdn.jsdelivr.net/gh/dmhendricks/signature-social-icons/icons/round-flat-filled/50px/linkedin.png" alt="LinkedIn" title="LinkedIn" width="25" height="25" style="filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(220deg) brightness(102%) contrast(101%);" />
+                                </a>
                             </div>
                         </div>
                     </body>
@@ -151,13 +165,14 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
                         }
                     ]
                 });            
-
+            
                 console.log('Email sent:', info.response);
                 res.status(200).send('PDF emailed successfully');
             } catch (error) {
                 console.error('Error sending email:', error);
                 res.status(500).send('Error sending email');
             }
+            
         });
 
         // Add User Name
