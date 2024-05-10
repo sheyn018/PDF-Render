@@ -212,7 +212,7 @@ app.get("/generate-pdf", async (req: { query: { userName: any; email: any; busin
         doc.moveTo(50, lineYCoordinate) // Move to the starting point
             .lineTo(730, lineYCoordinate) // Draw a line to the end point
             .lineWidth(1) // Set line width to 1
-            .strokeColor('#E5CE22') // Set line color to #E5CE22
+            .strokeColor('#6e36e9') // Set line color to #E5CE22
             .stroke(); // Draw the line
 
         // Add the "Business Information" header

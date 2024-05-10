@@ -203,7 +203,7 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
         doc.moveTo(50, lineYCoordinate) // Move to the starting point
             .lineTo(730, lineYCoordinate) // Draw a line to the end point
             .lineWidth(1) // Set line width to 1
-            .strokeColor('#E5CE22') // Set line color to #E5CE22
+            .strokeColor('#6e36e9') // Set line color to #E5CE22
             .stroke(); // Draw the line
         // Add the "Business Information" header
         doc.font('Helvetica-Bold').text('BUSINESS INFORMATION', 50, 91, { align: 'left' });
