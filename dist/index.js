@@ -127,15 +127,15 @@ app.get("/generate-pdf", (req, res) => __awaiter(void 0, void 0, void 0, functio
                     <body>
                         <div class="container">
                             <div class="header">
-                                <img src="https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/logo.png?t=2024-05-09T07%3A57%3A05.662Z" alt="Creative Shizzle Logo" width="30%" height="30%" >
+                                <img src="https://rbbsdrzrdfsrvigkfhoj.supabase.co/storage/v1/object/public/files_bucket/test_folder/logo.png?t=2024-05-09T07%3A57%3A05.662Z" alt="Creative Shizzle Logo" width="30%" height="30%">
                                 <h1>Your Brand Mood Board</h1>
                             </div>
                             <div class="content">
                                 <p>Hello <strong>${userName}</strong>!</p>
                                 <p>We're thrilled to present you with your personalized starter mood board, generated through your interaction with Whizzle! This mood board is designed to ignite inspiration for your brand identity.</p>
-                                <p>Need help implementing your new brand? Our professional Creative Shizzle graphic designers are here to help. See our <strong>Brand My Bizzle Package</strong> priced at just $899 for a full brand kit.</p>
+                                <p>Need help implementing your new brand? With our <strong>Pro Fo' Shizzle plan</strong>, you can get an all-new brand and all of the marketing materials you need for your biz to shine and sizzle. Start a free trial today for just $149.</p>
                                 <div style="text-align: center; margin-top: 20px;">
-                                    <a href="https://creativeshizzle.com/services/brand-my-bizzle/" style="background-color: #6e36e9; border: none; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; border-radius: 25px;">Explore Our Services</a>
+                                    <a href="https://creativeshizzle.com/" style="background-color: #6e36e9; border: none; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; font-size: 14px; border-radius: 25px;">Explore Our Services</a>
                                 </div>
                             </div>
                             <div class="social-section" style="margin-top: 40px; text-align: center;">
